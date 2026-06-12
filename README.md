@@ -1,6 +1,6 @@
 # CPTM Efluentes 🌊
 
-Sistema de monitoramento ambiental para captação de dados de efluentes em campo, com operação **offline-first**, sincronização com backend e gestão por perfis (operador/supervisor).
+Sistema de monitoramento ambiental para captação de dados de efluentes em campo, com operação offline-first, sincronização com backend e gestão por perfis (operador/supervisor).
 
 ---
 
@@ -219,20 +219,15 @@ App: `http://localhost:5173`
 
 ---
 
-## 10) Status atual e pontos de atenção
+## 10) Status atual
 
 - Fluxo principal operador/supervisor funcional;
 - Correções recentes de sincronização e unicidade aplicadas;
 - Revisão de bloqueio de usuário ajustada no frontend para melhor tratamento de falha;
-- Recomenda-se executar teste de caminho crítico pós-deploy:
-  - login supervisor;
-  - alteração de perfil;
-  - bloqueio de usuário;
-  - criação de formulário com PK duplicada (esperado bloquear).
 
 ---
 
-## 11) Equipe e manutenção
+## 11) Equipe
 
 Projeto mantido por: **Davi, Helen, Lucas e Pedro**  
 Última atualização deste documento: **Junho/2026**
