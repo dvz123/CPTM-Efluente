@@ -1,0 +1,185 @@
+@import "tailwindcss";
+
+/* ====== CPTM Dark Theme Variables ====== */
+
+:root {
+  --cptm-bg: #e9e4da;
+  --cptm-surface: #fffdfa;
+  --cptm-surface-alt: #f2ece2;
+  --cptm-text: #191919;
+  --cptm-text-muted: #625f58;
+  --cptm-border: #cdc4b5;
+  --cptm-primary: #4c6246;
+  --cptm-primary-hover: #3d5038;
+  --cptm-danger: #dc2626;
+  --cptm-warning: #f59e0b;
+  --cptm-warning-bg: #fef3c7;
+  --cptm-info: #3b82f6;
+  --cptm-header: #4c6246;
+  --cptm-header-text: #ffffff;
+  --cptm-tooltip-bg: #fef9c3;
+  --cptm-tooltip-border: #f59e0b;
+  --cptm-tooltip-text: #713f12;
+}
+
+
+
+.dark {
+  --cptm-bg: #101010;
+  --cptm-surface: #191919;
+  --cptm-surface-alt: #232323;
+  --cptm-text: #f5f5f5;
+  --cptm-text-muted: #a5a5a5;
+  --cptm-border: #343434;
+  --cptm-primary: #667f5f;
+  --cptm-primary-hover: #75906e;
+  --cptm-danger: #ef4444;
+  --cptm-warning: #fbbf24;
+  --cptm-warning-bg: #422006;
+  --cptm-info: #60a5fa;
+  --cptm-header: #111111;
+  --cptm-header-text: #f1f5f9;
+  --cptm-tooltip-bg: #422006;
+  --cptm-tooltip-border: #f59e0b;
+  --cptm-tooltip-text: #fef3c7;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
+
+/* ====== Base Styles ====== */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background:
+    radial-gradient(circle at top left, rgba(76, 98, 70, 0.08) 0%, transparent 24%),
+    linear-gradient(180deg, color-mix(in srgb, var(--cptm-bg) 88%, #ffffff 12%) 0%, var(--cptm-bg) 100%);
+  color: var(--cptm-text);
+  margin: 0;
+  min-height: 100dvh;
+}
+
+/* ====== Stepper ====== */
+.stepper-dot {
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: 0.875rem;
+  font-weight: 700;
+  transition: background-color 0.2s ease, color 0.2s ease, opacity 0.2s ease;
+}
+.stepper-dot.active {
+  background-color: var(--cptm-primary);
+  color: #fff;
+}
+.stepper-dot.completed {
+  background-color: var(--cptm-primary);
+  color: #fff;
+  opacity: 0.7;
+}
+.stepper-dot.inactive {
+  background-color: var(--cptm-surface-alt);
+  color: var(--cptm-text-muted);
+}
+
+/* ====== Form Fields ====== */
+.field-input {
+  width: 100%;
+  padding: 0.625rem 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  background-color: var(--cptm-surface-alt);
+  color: var(--cptm-text);
+  border: 1px solid var(--cptm-border);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}
+.field-input:focus {
+  outline: none;
+  border-color: var(--cptm-primary);
+  box-shadow: 0 0 0 2px rgba(22, 163, 74, 0.2);
+}
+.field-input::placeholder {
+  color: var(--cptm-text-muted);
+}
+
+/* ====== Cortina Amarela (Tooltip) ====== */
+.tooltip-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-left: 0.25rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  cursor: help;
+  background-color: var(--cptm-tooltip-bg);
+  color: var(--cptm-tooltip-text);
+  border: 1px solid var(--cptm-tooltip-border);
+  font-weight: 700;
+}
+
+.tooltip-content {
+  position: absolute;
+  z-index: 50;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.18);
+  background-color: var(--cptm-tooltip-bg);
+  color: var(--cptm-tooltip-text);
+  border: 1px solid var(--cptm-tooltip-border);
+  max-width: min(24rem, calc(100vw - 2rem));
+  width: min(24rem, calc(100vw - 2rem));
+  line-height: 1.45;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+/* ====== Offline Banner ====== */
+.offline-banner {
+  width: 100%;
+  padding: 0.5rem 1rem;
+  text-align: center;
+  font-size: 0.875rem;
+  font-weight: 500;
+  background-color: var(--cptm-warning);
+  color: #000;
+}
+
+/* ====== Photo Grid ====== */
+.photo-slot {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.75rem;
+  border-width: 2px;
+  border-style: dashed;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+  aspect-ratio: 4 / 3;
+  border-color: var(--cptm-border);
+  background-color: var(--cptm-surface-alt);
+}
+.photo-slot:hover {
+  border-color: var(--cptm-primary);
+}
+.photo-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 0.75rem;
+}
+
+/* ====== Scrollbar ====== */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--cptm-bg); }
+::-webkit-scrollbar-thumb { background: var(--cptm-border); border-radius: 3px; }
+

@@ -1,0 +1,122 @@
+SET SERVEROUTPUT ON;
+
+PROMPT =============================================;
+PROMPT CPTM Ambiental - Limpeza de dados de teste;
+PROMPT Schema atual / quota / recyclebin / LOBs;
+PROMPT =============================================;
+
+PROMPT;
+PROMPT [1/6] Estado antes da limpeza;
+SELECT tablespace_name, bytes, max_bytes
+FROM user_ts_quotas
+ORDER BY tablespace_name;
+
+SELECT 'PT_EFLUENTE' AS table_name, COUNT(*) AS total FROM PT_EFLUENTE
+UNION ALL
+SELECT 'RT_EFLUENTE', COUNT(*) FROM RT_EFLUENTE;
+
+SELECT segment_name, segment_type, tablespace_name, bytes
+FROM user_segments
+ORDER BY bytes DESC
+FETCH FIRST 15 ROWS ONLY;
+
+SELECT object_name, original_name, type
+FROM recyclebin;
+
+PROMPT;
+PROMPT [2/6] Limpando recyclebin;
+PURGE RECYCLEBIN;
+
+PROMPT;
+PROMPT [3/6] Limpando registros de teste;
+TRUNCATE TABLE RT_EFLUENTE;
+TRUNCATE TABLE PT_EFLUENTE;
+
+PROMPT;
+PROMPT [4/6] Tentando recuperar espaco da tabela RT_EFLUENTE;
+BEGIN
+  EXECUTE IMMEDIATE 'ALTER TABLE RT_EFLUENTE ENABLE ROW MOVEMENT';
+  DBMS_OUTPUT.PUT_LINE('ROW MOVEMENT habilitado em RT_EFLUENTE.');
+EXCEPTION
+  WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE('Aviso em RT_EFLUENTE ENABLE ROW MOVEMENT: ' || SQLERRM);
+END;
+/
+
+BEGIN
+  EXECUTE IMMEDIATE 'ALTER TABLE RT_EFLUENTE SHRINK SPACE';
+  DBMS_OUTPUT.PUT_LINE('RT_EFLUENTE SHRINK SPACE executado.');
+EXCEPTION
+  WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE('Aviso em RT_EFLUENTE SHRINK SPACE: ' || SQLERRM);
+END;
+/
+
+BEGIN
+  EXECUTE IMMEDIATE 'ALTER TABLE RT_EFLUENTE MODIFY LOB (DATA) (SHRINK SPACE)';
+  DBMS_OUTPUT.PUT_LINE('LOB DATA de RT_EFLUENTE encolhido.');
+EXCEPTION
+  WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE('Aviso em LOB DATA de RT_EFLUENTE: ' || SQLERRM);
+END;
+/
+
+PROMPT;
+PROMPT [5/6] Tentando recuperar espaco da tabela PT_EFLUENTE;
+BEGIN
+  EXECUTE IMMEDIATE 'ALTER TABLE PT_EFLUENTE ENABLE ROW MOVEMENT';
+  DBMS_OUTPUT.PUT_LINE('ROW MOVEMENT habilitado em PT_EFLUENTE.');
+EXCEPTION
+  WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE('Aviso em PT_EFLUENTE ENABLE ROW MOVEMENT: ' || SQLERRM);
+END;
+/
+
+BEGIN
+  EXECUTE IMMEDIATE 'ALTER TABLE PT_EFLUENTE SHRINK SPACE';
+  DBMS_OUTPUT.PUT_LINE('PT_EFLUENTE SHRINK SPACE executado.');
+EXCEPTION
+  WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE('Aviso em PT_EFLUENTE SHRINK SPACE: ' || SQLERRM);
+END;
+/
+
+BEGIN
+  EXECUTE IMMEDIATE 'ALTER TABLE PT_EFLUENTE MODIFY LOB ("GEOM"."SDO_ELEM_INFO") (SHRINK SPACE)';
+  DBMS_OUTPUT.PUT_LINE('LOB SDO_ELEM_INFO de PT_EFLUENTE encolhido.');
+EXCEPTION
+  WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE('Aviso em LOB SDO_ELEM_INFO de PT_EFLUENTE: ' || SQLERRM);
+END;
+/
+
+BEGIN
+  EXECUTE IMMEDIATE 'ALTER TABLE PT_EFLUENTE MODIFY LOB ("GEOM"."SDO_ORDINATES") (SHRINK SPACE)';
+  DBMS_OUTPUT.PUT_LINE('LOB SDO_ORDINATES de PT_EFLUENTE encolhido.');
+EXCEPTION
+  WHEN OTHERS THEN
+    DBMS_OUTPUT.PUT_LINE('Aviso em LOB SDO_ORDINATES de PT_EFLUENTE: ' || SQLERRM);
+END;
+/
+
+PROMPT;
+PROMPT [6/6] Estado final apos limpeza;
+SELECT tablespace_name, bytes, max_bytes
+FROM user_ts_quotas
+ORDER BY tablespace_name;
+
+SELECT 'PT_EFLUENTE' AS table_name, COUNT(*) AS total FROM PT_EFLUENTE
+UNION ALL
+SELECT 'RT_EFLUENTE', COUNT(*) FROM RT_EFLUENTE;
+
+SELECT segment_name, segment_type, tablespace_name, bytes
+FROM user_segments
+ORDER BY bytes DESC
+FETCH FIRST 15 ROWS ONLY;
+
+SELECT object_name, original_name, type
+FROM recyclebin;
+
+PROMPT;
+PROMPT Script concluido.;
+PROMPT Se a quota continuar perto do limite, sera necessario aumentar a quota do schema no tablespace USERS.;
